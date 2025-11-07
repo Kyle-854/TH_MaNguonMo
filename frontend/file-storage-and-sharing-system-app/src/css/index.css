@@ -1,0 +1,287 @@
+/* Basic Reset & Body Styling */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ccc;
+    color: #333;
+    display: grid;
+    min-height: 100vh;
+    grid-template-rows: auto 1fr; /* Header: auto height, Main content: takes remaining space */
+}
+
+/* Header Styling */
+.main-header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr; /* Left: flexible, Center: content-sized, Right: flexible */
+    align-items: center;
+    padding: 0 20px;
+}
+
+.website-title h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.website-title h1 a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.website-title h1 a:hover {
+    color: #ecf0f1;
+}
+
+.auth-buttons {
+    justify-self: end; /* Align buttons to the right end of their grid cell */
+}
+
+.auth-buttons .btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.auth-buttons .btn:hover {
+    background-color: #2980b9;
+}
+
+.auth-buttons .btn-register {
+    background-color: #2ecc71;
+}
+
+.auth-buttons .btn-register:hover {
+    background-color: #27ae60;
+}
+
+/* Main Content Area */
+.content-area {
+    display: grid;
+    place-items: center; /* Shorthand for justify-items: center and align-items: center */
+    padding: 20px;
+}
+
+.download-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+}
+
+.download-container p {
+    font-size: 20px;
+    margin-bottom: 25px;
+    color: #555;
+}
+
+#downloadLink {
+    width: calc(100% - 20px);
+    padding: 12px 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#downloadButton {
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+#downloadButton:hover {
+    background-color: #d35400;
+}
+
+/* Styles for the disabled download button */
+#downloadButton.disabled {
+    background-color: #f39c12;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+#downloadButton.disabled:hover {
+    background-color: #f39c12;
+}
+
+/* --- Dialog Styles --- */
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialog-overlay.show {
+    display: flex; /* Show when .show class is added */
+}
+
+.dialog-box {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    position: relative;
+    text-align: left;
+}
+
+.dialog-box h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 25px;
+    font-size: 24px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #aaa;
+    cursor: pointer;
+}
+
+#loginForm label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+/* Shared styles for form inputs in dialogs */
+.dialog-box form input[type="text"],
+.dialog-box form input[type="password"],
+.dialog-box form input[type="date"],
+.dialog-box form input[type="tel"],
+.dialog-box form input[type="email"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Grid layout for register form name fields */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Remove bottom margin for inputs inside a form group */
+.form-group input {
+    margin-bottom: 0;
+}
+
+/* Add margin to the bottom of the form-group container instead */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.forgot-password {
+    display: block;
+    text-align: right;
+    margin-bottom: 20px;
+    color: #3498db;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-submit-login {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    background-color: #3498db;
+    border-radius: 5px;
+    border: none;
+}
+
+.btn-submit-login:hover {
+    background-color: #2980b9;
+}
+
+.btn-submit-register {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    background-color: #2ecc71;
+    border-radius: 5px;
+    border: none;
+}
+.btn-submit-register:hover {
+    background-color: #27ae60;
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    /* Header adjustments for smaller screens */
+    .header-container {
+        grid-template-columns: 1fr; /* Stack elements in a single column */
+        justify-items: center; /* Center-align all items in the header */
+        gap: 15px; /* Add space between stacked items */
+        padding: 15px 20px;
+    }
+
+    .website-title {
+        grid-row: 1; /* Ensure title is the first item */
+    }
+
+    .auth-buttons {
+        grid-row: 2; /* Place buttons below the title */
+        justify-self: center;
+    }
+
+    /* Hide the empty div used for desktop centering */
+    .header-left {
+        display: none;
+    }
+
+    /* Content adjustments */
+    .download-container {
+        padding: 30px 20px;
+        margin: 0 15px;
+    }
+
+    .download-container p {
+        font-size: 18px;
+    }
+
+    /* Stack name fields on mobile */
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
