@@ -7,6 +7,79 @@
     <link rel="stylesheet" href="./src/css/index.css">
 </head>
 <body>
-    <h1>file-storage-and-sharing-system</h1>
+    <header class="main-header">
+        <div class="header-container">
+            <!-- Phần tử trống để đẩy tên website vào giữa -->
+            <div class="header-left"></div>
+            
+            <div class="website-title">
+                <h1><a href="#">Store And Share</a></h1>
+            </div>
+            
+            <div class="auth-buttons">
+                <button class="btn btn-login">Đăng nhập</button>
+                <button class="btn btn-register">Đăng ký</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="content-area">
+        <div class="download-container">
+            <p>Dán link để tải về</p>
+            <input type="text" id="downloadLink" placeholder="Nhập liên kết tải xuống của bạn ở đây...">
+            <button id="downloadButton" class="btn">Tải về</button>
+        </div>
+    </main>
+
+    <!-- Login Dialog -->
+    <div id="loginDialogOverlay" class="dialog-overlay">
+        <div class="dialog-box">
+            <button class="close-button">&times;</button>
+            <h2>Đăng nhập</h2>
+            <form id="loginForm">
+                <label for="loginEmail">Email hoặc số điện thoại</label>
+                <input type="text" id="loginEmail" name="loginEmail" required>
+                
+                <label for="loginPassword">Mật khẩu</label>
+                <input type="password" id="loginPassword" name="loginPassword" required>
+                
+                <a href="#" class="forgot-password">Quên mật khẩu?</a>
+                
+                <button type="submit" class="btn btn-submit-login">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Register Dialog -->
+    <div id="registerDialogOverlay" class="dialog-overlay">
+        <div class="dialog-box">
+            <button class="close-button">&times;</button>
+            <h2>Đăng ký</h2>
+            <form id="registerForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="registerLastName">Họ và tên lót</label>
+                        <input type="text" id="registerLastName" name="registerLastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerFirstName">Tên</label>
+                        <input type="text" id="registerFirstName" name="registerFirstName" required>
+                    </div>
+                </div>
+                <label for="registerDob">Ngày sinh</label>
+                <input type="date" id="registerDob" name="registerDob" required>
+
+                <label for="registerPhone">Số điện thoại</label>
+                <input type="tel" id="registerPhone" name="registerPhone" required>
+
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" name="registerEmail" required>
+                
+                <button type="submit" class="btn btn-submit-register">Đăng ký</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="./src/js/main.js"></script>
 </body>
 </html>
