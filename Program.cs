@@ -1,15 +1,24 @@
+using FileShareApp.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace FileShareApp
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            var app = builder.Build();
+            builder.Services.AddDbContext<FileShareDbContext>(options => options.UseMySql
+            (
+                builder.Configuration.GetConnectionString("DefaultConnection"),
+                ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
+            ));
+
+            WebApplication? app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -26,9 +35,11 @@ namespace FileShareApp
 
             app.UseAuthorization();
 
-            app.MapControllerRoute(
+            app.MapControllerRoute
+            (
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}"
+            );
 
             app.Run();
         }
