@@ -12,6 +12,12 @@ namespace FileShareApp
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.Limits.MaxRequestBodySize = 10737418240; // 10 GB
+                options.Limits.MinRequestBodyDataRate = null;
+            });
+
             builder.Services.AddDbContext<FileShareDbContext>(options => options.UseMySql
             (
                 builder.Configuration.GetConnectionString("DefaultConnection"),
