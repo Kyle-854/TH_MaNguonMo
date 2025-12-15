@@ -4,6 +4,7 @@ using FileShareApp.Helpers;
 using FileShareApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 
 namespace FileShareApp.Controllers
@@ -99,6 +100,52 @@ namespace FileShareApp.Controllers
             {
                 return Json(new { success = false, message = "Lỗi: " + ex.Message });
             }
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            //string? userIdStr = User.FindFirst("UserId")?.Value;
+
+            //if (userIdStr == null)
+            //{
+            //    return RedirectToAction("Login", "Account");
+            //}
+
+            //int userId = int.Parse(userIdStr);
+
+            int userId = 1; // For testing purposes only. Replace with actual user ID retrieval logic.
+
+            List<SharedFile>? files = await _context.Files
+                .Where(f => f.UserId == userId)
+                .OrderByDescending(f => f.UploadDate)
+                .ToListAsync();
+
+            return View(files);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            //string? userIdStr = User.FindFirst("UserId")?.Value;
+            //int userId = int.Parse(userIdStr);
+
+            int userId = 1; // For testing purposes only. Replace with actual user ID retrieval logic.
+
+            SharedFile? file = await _context.Files.FirstOrDefaultAsync(f => f.FileId == id && f.UserId == userId);
+
+            if (file != null)
+            {
+                string filePath = Path.Combine(_env.WebRootPath, "uploads", file.StoredFileName);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
+                _context.Files.Remove(file);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
