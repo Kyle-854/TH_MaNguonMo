@@ -5,8 +5,6 @@ namespace FileShareApp.Data
 {
     public partial class FileShareDbContext : DbContext
     {
-        public virtual DbSet<User> Users { get; set; }
-
         public FileShareDbContext()
         {
         }
@@ -15,6 +13,10 @@ namespace FileShareApp.Data
         {
         }
 
+        public virtual DbSet<SharedFile> Files { get; set; }
+
+        public virtual DbSet<User> Users { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
@@ -22,6 +24,15 @@ namespace FileShareApp.Data
             modelBuilder
                 .UseCollation("utf8mb4_unicode_ci")
                 .HasCharSet("utf8mb4");
+
+            modelBuilder.Entity<SharedFile>(entity =>
+            {
+                entity.HasKey(e => e.FileId).HasName("PRIMARY");
+
+                entity.Property(e => e.UploadDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(d => d.User).WithMany(p => p.Files).HasConstraintName("FK_Files_Users");
+            });
 
             modelBuilder.Entity<User>(entity =>
             {
