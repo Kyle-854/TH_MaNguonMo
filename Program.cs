@@ -1,4 +1,5 @@
 using FileShareApp.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 namespace FileShareApp
@@ -23,6 +24,13 @@ namespace FileShareApp
                 builder.Configuration.GetConnectionString("DefaultConnection"),
                 ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
             ));
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+            });
 
             WebApplication? app = builder.Build();
 
