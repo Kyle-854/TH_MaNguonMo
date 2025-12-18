@@ -1,0 +1,120 @@
+﻿@model IEnumerable<FileShareApp.Models.SharedFile>
+@{
+    ViewData["Title"] = "Tập tin của tôi";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>🗂 Tập tin của tôi</h2>
+        <a asp-action="Upload" class="btn btn-success">+ Tải lên mới</a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <table class="table table-hover table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Tên tập tin</th>
+                <th>Kích thước</th>
+                <th>Ngày tải lên</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>@item.OriginalName</strong>
+                    </td>
+                    <td>
+                        @{
+                            double sizeInMb = item.FileSize / 1024.0 / 1024.0;
+                            string sizeDisplay = sizeInMb < 1
+                            ? Math.Round(item.FileSize / 1024.0, 1) + " KB"
+                            : Math.Round(sizeInMb, 2) + " MB";
+                        }
+                        @sizeDisplay
+                    </td>
+                    <td>@item.UploadDate?.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <form asp-action="Delete" asp-route-id="@item.FileId" method="post"
+                              onsubmit="return confirm('Bạn có chắc muốn xóa file này không?');" style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                        </form>
+
+                        <button class="btn btn-sm btn-info text-white" onclick="openShareModal('@item.ShareToken')">
+                            <i class="bi bi-share-fill"></i> Chia sẻ
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center mt-5 text-muted">
+            <p>Bạn chưa tải lên tập tin nào.</p>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="shareModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">🔗 Chia sẻ tập tin</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-2">Sao chép liên kết dưới đây để lấy link tải về:</p>
+
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="shareLinkInput" readonly>
+
+                    <button class="btn btn-outline-primary" type="button" id="copyBtn">
+                        <i class="bi bi-clipboard"></i> Copy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openShareModal(token) {
+            var domain = window.location.origin;
+            var fullLink = domain + "/d/" + token;
+
+            var input = document.getElementById('shareLinkInput');
+            input.value = fullLink;
+
+            var btn = document.getElementById('copyBtn');
+            btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+            btn.className = 'btn btn-outline-primary';
+
+            var myModal = new bootstrap.Modal(document.getElementById('shareModal'));
+            myModal.show();
+        }
+
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            var input = document.getElementById('shareLinkInput');
+
+            input.select();
+            input.setSelectionRange(0, 99999);
+
+            navigator.clipboard.writeText(input.value).then(function() {
+                var btn = document.getElementById('copyBtn');
+                btn.innerHTML = '<i class="bi bi-check-lg"></i> Đã Copy!';
+                btn.className = 'btn btn-success';
+            }, function(err) {
+                alert('Lỗi khi copy: ' + err);
+            });
+        });
+    </script>
+}

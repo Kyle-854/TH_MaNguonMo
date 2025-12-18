@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Tải lên tập tin";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">🚀 Tải lên nhiều tập tin</h4>
+        </div>
+        <div class="card-body">
+            <div class="mb-4 text-center p-5 border border-dashed rounded bg-light">
+                <i class="bi bi-cloud-arrow-up fs-1 text-primary"></i>
+                <p class="mt-2">Chọn nhiều file để tải lên cùng lúc</p>
+
+                <input type="file" id="fileInput" class="form-control w-50 mx-auto" multiple>
+
+                <button class="btn btn-success mt-3 px-4" onclick="startUpload()">
+                    Bắt đầu Tải lên
+                </button>
+            </div>
+
+            <div id="progressArea" class="mt-3">
+            </div>
+
+            <div class="mt-3 text-end">
+                <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function startUpload() {
+            var fileInput = document.getElementById('fileInput');
+            var files = fileInput.files;
+            var progressArea = document.getElementById('progressArea');
+
+            if (files.length === 0) {
+                alert("Vui lòng chọn ít nhất 1 file!");
+                return;
+            }
+
+            progressArea.innerHTML = "";
+
+            for (let i = 0; i < files.length; i++) {
+                uploadSingleFile(files[i], i);
+            }
+        }
+
+        function uploadSingleFile(file, index) {
+            var progressArea = document.getElementById('progressArea');
+
+            var rowId = "file-row-" + index;
+            var html = `
+                <div class="mb-3" id="${rowId}">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="fw-bold text-truncate" style="max-width: 70%;">${file.name}</span>
+                        <span class="status-text text-muted">Đang chờ...</span>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                             role="progressbar" style="width: 0%">0%</div>
+                    </div>
+                </div>`;
+
+            progressArea.insertAdjacentHTML('beforeend', html);
+
+            var formData = new FormData();
+            formData.append("file", file);
+
+            var xhr = new XMLHttpRequest();
+
+            xhr.upload.addEventListener("progress", function(e) {
+                if (e.lengthComputable) {
+                    var percentComplete = Math.round((e.loaded / e.total) * 100);
+
+                    var row = document.getElementById(rowId);
+                    var progressBar = row.querySelector(".progress-bar");
+
+                    progressBar.style.width = percentComplete + "%";
+                    progressBar.innerHTML = percentComplete + "%";
+                }
+            });
+
+            xhr.onload = function() {
+                var row = document.getElementById(rowId);
+                var statusText = row.querySelector(".status-text");
+                var progressBar = row.querySelector(".progress-bar");
+
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        progressBar.classList.remove("progress-bar-animated");
+                        progressBar.classList.add("bg-success");
+                        statusText.innerHTML = '<span class="text-success">✔ Hoàn thành</span>';
+                    } else {
+                        progressBar.classList.add("bg-danger");
+                        statusText.innerHTML = '<span class="text-danger">❌ ' + response.message + '</span>';
+                    }
+                } else {
+                    statusText.innerHTML = '<span class="text-danger">❌ Lỗi mạng</span>';
+                }
+            };
+
+            xhr.onerror = function() {
+                var row = document.getElementById(rowId);
+                row.querySelector(".status-text").innerHTML = '<span class="text-danger">❌ Lỗi kết nối</span>';
+            };
+
+            xhr.open("POST", "/File/UploadStream");
+            xhr.send(formData);
+        }
+    </script>
+}
