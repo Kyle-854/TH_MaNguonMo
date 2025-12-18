@@ -1,5 +1,42 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model FileShareApp.Models.SharedFile
 @{
+    ViewData["Title"] = "Tải xuống tập tin";
+    double sizeInMb = Model.FileSize / 1024.0 / 1024.0;
+    string sizeDisplay = sizeInMb < 1
+        ? Math.Round(Model.FileSize / 1024.0, 1) + " KB"
+        : Math.Round(sizeInMb, 2) + " MB";
 }
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow text-center">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Sẵn sàng tải xuống</h4>
+                </div>
+                <div class="card-body py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-file-earmark-zip-fill text-warning display-1"></i>
+                    </div>
+
+                    <h3 class="card-title text-break">@Model.OriginalName</h3>
+
+                    <ul class="list-unstyled mt-3 text-muted">
+                        <li>Kích thước: <strong>@sizeDisplay</strong></li>
+                        <li>Người chia sẻ: <strong>@Model.User?.Username</strong></li>
+                        <li>Ngày tải lên: @Model.UploadDate?.ToString("dd/MM/yyyy")</li>
+                    </ul>
+
+                    <hr />
+
+                    <a href="/d/@Model.ShareToken/download" class="btn btn-primary btn-lg px-5 rounded-pill">
+                        <i class="bi bi-download"></i> Tải xuống
+                    </a>
+                </div>
+                <div class="card-footer text-muted">
+                    FileShareApp - Chia sẻ tập tin
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
