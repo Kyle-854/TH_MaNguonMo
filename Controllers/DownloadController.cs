@@ -31,5 +31,27 @@ namespace FileShareApp.Controllers
 
             return View(file);
         }
+
+        [HttpGet("d/{token}/download")]
+        public async Task<IActionResult> DownloadFile(string token)
+        {
+            SharedFile? file = await _context.Files.FirstOrDefaultAsync(f => f.ShareToken == token);
+
+            if (file == null)
+            {
+                Response.StatusCode = 404;
+                return View("FileNotFound");
+            }
+
+            string filePath = Path.Combine(_env.WebRootPath, "uploads", file.StoredFileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                Response.StatusCode = 404;
+                return View("FileNotFound");
+            }
+
+            return PhysicalFile(filePath, "application/octet-stream", file.OriginalName);
+        }
     }
 }
