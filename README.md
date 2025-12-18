@@ -53,13 +53,13 @@ Khác với cơ chế `IFormFile` truyền thống (lưu file vào RAM/Temp trư
 Mở terminal/cmd và chạy lệnh:
 ```bash
 git clone https://github.com/Kyle-854/TH_MaNguonMo.git
-cd FileShareApp
+cd TH_MaNguonMo
 ```
 
 ### Bước 2: Cấu hình Kết nối Database
 Đổi tên file `appsettings.Example.json` thành `appsettings.json` trong thư mục gốc của dự án. Cập nhật thông tin `ConnectionStrings` để trỏ tới MySQL Server của bạn.
 
-Thay thế các giá trị `YOUR_SERVER`, `YOUR_USER`, `YOUR_PASSWORD` bằng thông tin thật:
+Thay thế các giá trị `YOUR_SERVER`, `YOUR_USER`, `YOUR_PASSWORD` bằng thông tin của MySQL Server:
 
 ```json
 {
