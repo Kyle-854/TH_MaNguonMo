@@ -41,14 +41,20 @@
                     </td>
                     <td>@item.UploadDate?.ToString("dd/MM/yyyy HH:mm")</td>
                     <td>
+                        <a href="/d/@item.ShareToken/download" class="btn btn-sm btn-primary text-white" title="Tải xuống">
+                            <i class="bi bi-download"></i>Tải xuống
+                        </a>
+
+                        <button class="btn btn-sm btn-info text-white" onclick="openShareModal('@item.ShareToken')" title="Lấy link chia sẻ">
+                            <i class="bi bi-share-fill"></i>Chia sẻ
+                        </button>
+
                         <form asp-action="Delete" asp-route-id="@item.FileId" method="post"
                               onsubmit="return confirm('Bạn có chắc muốn xóa file này không?');" style="display:inline;">
-                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                            <button type="submit" class="btn btn-sm btn-danger" title="Xóa file">
+                                <i class="bi bi-trash-fill"></i>Xóa file
+                            </button>
                         </form>
-
-                        <button class="btn btn-sm btn-info text-white" onclick="openShareModal('@item.ShareToken')">
-                            <i class="bi bi-share-fill"></i> Chia sẻ
-                        </button>
                     </td>
                 </tr>
             }
